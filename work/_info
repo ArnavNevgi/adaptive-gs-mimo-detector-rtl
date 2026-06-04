@@ -1,0 +1,459 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/fpga_projects/adaptive-gs-mimo-detector
+T_opt1
+!s110 1780565314
+VkfI6ZN1k0M<0B7m05m>B_0
+04 28 4 work tb_mimo_detector_top_vectors fast 0
+=1-8c8b5b3d5d13-6a214541-3ae-6544
+o-quiet -auto_acc_if_foreign -work work
+Z1 tCvgOpt 0
+n@_opt1
+OL;O;10.7c;67
+vcomplex_add
+Z2 DXx6 sv_std 3 std 0 22 d=_JfHTnXCN[H5FjiaJJc0
+Z3 DXx4 work 15 fixed_point_pkg 0 22 >O>UKb1_ZXM5ni5AE7W801
+Z4 !s110 1780565306
+!i10b 1
+!s100 Gh8Bl@C3RQ`hZC7@Al^5l1
+IX3R6:QK:QBH>Y^S1iIW@20
+Z5 VDg1SIo80bB@j0V0VzS_@n1
+!s105 complex_add_sv_unit
+S1
+R0
+w1780558279
+8rtl/complex_add.sv
+Frtl/complex_add.sv
+L0 3
+Z6 OL;L;10.7c;67
+r1
+!s85 0
+31
+Z7 !s108 1780565306.000000
+!s107 rtl/fixed_point_pkg.sv|rtl/complex_add.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/complex_add.sv|
+!i113 0
+Z8 o-sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z9 !s92 -sv +incdir+rtl -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R1
+vcomplex_mac
+R2
+R3
+R4
+!i10b 1
+!s100 e=4^i2>ZGAEMz5j:QOF?M3
+IYZezoO=Gh9=JgC8P8Am;X1
+R5
+!s105 complex_mac_sv_unit
+S1
+R0
+w1780560832
+8rtl/complex_mac.sv
+Frtl/complex_mac.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/complex_mac.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/complex_mac.sv|
+!i113 0
+R8
+R9
+R1
+vcomplex_mult
+R2
+R3
+R4
+!i10b 1
+!s100 ?KCDhfeof@fbm7HR32keM1
+I0SDSP80U?N]ZG:;8e]z@E0
+R5
+!s105 complex_mult_sv_unit
+S1
+R0
+w1780558317
+8rtl/complex_mult.sv
+Frtl/complex_mult.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/complex_mult.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/complex_mult.sv|
+!i113 0
+R8
+R9
+R1
+vcomplex_sub
+R2
+R3
+R4
+!i10b 1
+!s100 cJi2nbOhbBia9aB=]:e`;3
+IF1CjXd0`9o3]ie4ODC;a73
+R5
+!s105 complex_sub_sv_unit
+S1
+R0
+w1780558298
+8rtl/complex_sub.sv
+Frtl/complex_sub.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/complex_sub.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/complex_sub.sv|
+!i113 0
+R8
+R9
+R1
+vcondition_metric_unit
+R2
+R3
+R4
+!i10b 1
+!s100 ?IgGgd?coX:j3>SGn997j1
+If1;Ma8gYzzfG=Y^YLWf=U2
+R5
+!s105 condition_metric_unit_sv_unit
+S1
+R0
+w1780560853
+8rtl/condition_metric_unit.sv
+Frtl/condition_metric_unit.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/condition_metric_unit.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/condition_metric_unit.sv|
+!i113 0
+R8
+R9
+R1
+Xfixed_point_pkg
+R2
+Z10 !s110 1780565307
+!i10b 1
+!s100 o5l;T8lR6J7gcWH7bCGYG0
+I?XSgf?PREn9kj6ch]Fa:W3
+V?XSgf?PREn9kj6ch]Fa:W3
+S1
+R0
+w1780558257
+8rtl/../rtl/fixed_point_pkg.sv
+Frtl/../rtl/fixed_point_pkg.sv
+L0 1
+R6
+r1
+!s85 0
+31
+Z11 !s108 1780565307.000000
+Z12 !s107 rtl/../rtl/fixed_point_pkg.sv|tb/tb_mimo_detector_top_vectors.sv|
+Z13 !s90 -reportprogress|300|-sv|+incdir+rtl|+incdir+tb|tb/tb_mimo_detector_top_vectors.sv|
+!i113 0
+R8
+Z14 !s92 -sv +incdir+rtl +incdir+tb -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R1
+vgram_matrix_compute
+R2
+R3
+R4
+!i10b 1
+!s100 Q0e4O5S`HM`9WE^fH[0M>3
+ISA=W[XK=m=64KZ_AfgVQA3
+R5
+!s105 gram_matrix_compute_sv_unit
+S1
+R0
+w1780561094
+8rtl/gram_matrix_compute.sv
+Frtl/gram_matrix_compute.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/gram_matrix_compute.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/gram_matrix_compute.sv|
+!i113 0
+R8
+R9
+R1
+vgs_solver
+R2
+R3
+R10
+!i10b 1
+!s100 L<ZJ]FRa[8GNWK^SMdJJ^2
+IzWkNz0gTb404iKoNPR:ko0
+R5
+!s105 gs_solver_sv_unit
+S1
+R0
+w1780561928
+8rtl/gs_solver.sv
+Frtl/gs_solver.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R11
+!s107 rtl/fixed_point_pkg.sv|rtl/gs_solver.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/gs_solver.sv|
+!i113 0
+R8
+R9
+R1
+vmatched_filter_compute
+R2
+R3
+R4
+!i10b 1
+!s100 4=>2bQZTZ9oa7fKODIdnZ3
+IZ4Qz4R@2j7ihAKZUGSVW;1
+R5
+!s105 matched_filter_compute_sv_unit
+S1
+R0
+w1780561114
+8rtl/matched_filter_compute.sv
+Frtl/matched_filter_compute.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/matched_filter_compute.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/matched_filter_compute.sv|
+!i113 0
+R8
+R9
+R1
+vmimo_detector_top
+R2
+R3
+R10
+!i10b 1
+!s100 YUd:8`bHdTZeDfMnFcD2o2
+Ii42JffV0<PT;>[RT5][892
+R5
+!s105 mimo_detector_top_sv_unit
+S1
+R0
+w1780563083
+8rtl/mimo_detector_top.sv
+Frtl/mimo_detector_top.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R11
+!s107 rtl/fixed_point_pkg.sv|rtl/mimo_detector_top.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/mimo_detector_top.sv|
+!i113 0
+R8
+R9
+R1
+vmode_select_unit
+R2
+R3
+R4
+!i10b 1
+!s100 <?mZDdV2O4n36>_<bRKml1
+IOgeBD8:JZI4H4DbzgU9>J2
+R5
+!s105 mode_select_unit_sv_unit
+S1
+R0
+w1780564590
+8rtl/mode_select_unit.sv
+Frtl/mode_select_unit.sv
+L0 19
+R6
+r1
+!s85 0
+31
+R7
+!s107 rtl/fixed_point_pkg.sv|rtl/mode_select_unit.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/mode_select_unit.sv|
+!i113 0
+R8
+R9
+R1
+Xphase6_vectors_pkg
+R2
+R3
+R10
+!i10b 1
+!s100 A4lF>U4`Emc_;^6c5OX>71
+I@3JkK`KaQJe^Tdne`_N]A2
+V@3JkK`KaQJe^Tdne`_N]A2
+S1
+R0
+w1780565227
+8tb/phase6_vectors_pkg.sv
+Ftb/phase6_vectors_pkg.sv
+L0 1
+R6
+r1
+!s85 0
+31
+R11
+!s107 tb/phase6_vectors_pkg.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|+incdir+tb|tb/phase6_vectors_pkg.sv|
+!i113 0
+R8
+R14
+R1
+vqpsk_slicer
+R2
+R3
+R10
+!i10b 1
+!s100 @R]ommGOC0keXlRTYHDA@3
+I451X[5H?cVa_6R:8Vk6kc2
+R5
+!s105 qpsk_slicer_sv_unit
+S1
+R0
+w1780558349
+8rtl/qpsk_slicer.sv
+Frtl/qpsk_slicer.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R11
+!s107 rtl/fixed_point_pkg.sv|rtl/qpsk_slicer.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/qpsk_slicer.sv|
+!i113 0
+R8
+R9
+R1
+vqpsk_slicer_array
+R2
+R3
+R10
+!i10b 1
+!s100 K>_M[W]gHH3eRc]=TM9nI2
+I3;c8f0z4CU_`;Qaj@0iz:0
+R5
+!s105 qpsk_slicer_array_sv_unit
+S1
+R0
+w1780562974
+8rtl/qpsk_slicer_array.sv
+Frtl/qpsk_slicer_array.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R11
+!s107 rtl/fixed_point_pkg.sv|rtl/qpsk_slicer_array.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/qpsk_slicer_array.sv|
+!i113 0
+R8
+R9
+R1
+vregularization_unit
+R2
+R3
+R10
+!i10b 1
+!s100 _jIN^ZFWM>][C4C:iiHE53
+Il_Pm<Y]LO;Q2lSA1^:l[g3
+R5
+!s105 regularization_unit_sv_unit
+S1
+R0
+w1780561134
+8rtl/regularization_unit.sv
+Frtl/regularization_unit.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R11
+!s107 rtl/fixed_point_pkg.sv|rtl/regularization_unit.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/regularization_unit.sv|
+!i113 0
+R8
+R9
+R1
+vtb_mimo_detector_top_vectors
+R2
+DXx4 work 15 fixed_point_pkg 0 22 ?XSgf?PREn9kj6ch]Fa:W3
+DXx4 work 18 phase6_vectors_pkg 0 22 @3JkK`KaQJe^Tdne`_N]A2
+R10
+!i10b 1
+!s100 97z47dX_NS`Nf>E_OO3U<0
+I=dg9<WSP?1ZadB0B]XW`a1
+R5
+!s105 tb_mimo_detector_top_vectors_sv_unit
+S1
+R0
+w1780564780
+8tb/tb_mimo_detector_top_vectors.sv
+Ftb/tb_mimo_detector_top_vectors.sv
+L0 5
+R6
+r1
+!s85 0
+31
+R11
+R12
+R13
+!i113 0
+R8
+R14
+R1
+vx_to_xout_converter
+R2
+R3
+R10
+!i10b 1
+!s100 EYU7>@OTA]Lk_iJZD7lm32
+I9<AYIjQ3[>VaFm`D=nAUS2
+R5
+!s105 x_to_xout_converter_sv_unit
+S1
+R0
+w1780562472
+8rtl/x_to_xout_converter.sv
+Frtl/x_to_xout_converter.sv
+L0 3
+R6
+r1
+!s85 0
+31
+R11
+!s107 rtl/fixed_point_pkg.sv|rtl/x_to_xout_converter.sv|
+!s90 -reportprogress|300|-sv|+incdir+rtl|rtl/x_to_xout_converter.sv|
+!i113 0
+R8
+R9
+R1
