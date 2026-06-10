@@ -133,3 +133,42 @@ For 4x4:
 - 64 complex MAC operations
 
 Instead of computing these in parallel, use one reused complex multiply-accumulate datapath controlled by counters.
+
+## Permanent RTL Organization
+
+This project keeps two RTL architecture trees permanently.
+
+### rtl/
+
+The `rtl/` directory contains the original verified unrolled RTL baseline.
+
+Purpose:
+- Golden functional reference
+- Phase 5/Phase 6 verified design
+- Used for module-by-module comparison against optimized RTL
+- Used to document the first hardware implementation attempt
+
+This architecture is more parallel and combinational. It is useful for correctness validation but was too large for the target FPGA after synthesis.
+
+### rtl_seq/
+
+The `rtl_seq/` directory contains the Phase 8 sequential resource-shared architecture.
+
+Purpose:
+- Area-optimized FPGA architecture
+- Reuses arithmetic datapaths across cycles
+- Reduces LUT/DSP/carry-chain pressure
+- Trades latency for resource efficiency
+- Used for final synthesis comparison against the unrolled baseline
+
+### Research Value
+
+Keeping both architectures allows the project to report a clear design progression:
+
+1. Verified fixed-point algorithm
+2. Unrolled functional RTL baseline
+3. FPGA synthesis bottleneck analysis
+4. Sequential resource-shared RTL redesign
+5. Area/timing comparison between both architectures
+
+This makes the project stronger because it demonstrates not only correctness, but also hardware architecture optimization.
