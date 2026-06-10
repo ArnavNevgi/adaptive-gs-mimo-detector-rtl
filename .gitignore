@@ -1,0 +1,31 @@
+
+# Questa/ModelSim generated files
+work/
+transcript
+*.wlf
+*.vstf
+*.ucdb
+modelsim.ini
+
+# Vivado generated files
+build/
+*.jou
+*.log
+*.str
+*.dcp
+*.runs/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+dfx_runtime.txt
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS/editor
+.vscode/
+.DS_Store
+Thumbs.db

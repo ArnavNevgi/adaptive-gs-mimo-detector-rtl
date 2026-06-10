@@ -10,8 +10,8 @@ module gram_matrix_compute #(
     parameter int OUT_W   = fixed_point_pkg::GBW_W,
     parameter int OUT_FRAC = fixed_point_pkg::GBW_FRAC
 ) (
-    input  logic signed [H_W-1:0] H_re [NR][NT],
-    input  logic signed [H_W-1:0] H_im [NR][NT],
+    input  var logic signed [H_W-1:0] H_re [NR][NT],
+    input  var logic signed [H_W-1:0] H_im [NR][NT],
 
     output logic signed [OUT_W-1:0] G_re [NT][NT],
     output logic signed [OUT_W-1:0] G_im [NT][NT]

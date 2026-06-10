@@ -18,12 +18,12 @@ module mimo_detector_top #(
     input  logic signed [fixed_point_pkg::GBW_W-1:0] noise_var,
 
     // H in Q4.12
-    input  logic signed [fixed_point_pkg::H_W-1:0] H_re [NR][NT],
-    input  logic signed [fixed_point_pkg::H_W-1:0] H_im [NR][NT],
+    input  var logic signed [fixed_point_pkg::H_W-1:0] H_re [NR][NT],
+    input  var logic signed [fixed_point_pkg::H_W-1:0] H_im [NR][NT],
 
     // y in Q4.12
-    input  logic signed [fixed_point_pkg::Y_W-1:0] y_re [NR],
-    input  logic signed [fixed_point_pkg::Y_W-1:0] y_im [NR],
+    input  var logic signed [fixed_point_pkg::Y_W-1:0] y_re [NR],
+    input  var logic signed [fixed_point_pkg::Y_W-1:0] y_im [NR],
 
     output logic done,
 

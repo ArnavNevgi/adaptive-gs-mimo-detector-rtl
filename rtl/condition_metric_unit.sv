@@ -5,8 +5,8 @@ module condition_metric_unit #(
     parameter int IN_W     = fixed_point_pkg::GBW_W,
     parameter int METRIC_W = 32
 ) (
-    input  logic signed [IN_W-1:0] G_re [N][N],
-    input  logic signed [IN_W-1:0] G_im [N][N],
+    input  var logic signed [IN_W-1:0] G_re [N][N],
+    input  var logic signed [IN_W-1:0] G_im [N][N],
 
     output logic [METRIC_W-1:0] diag_sum,
     output logic [METRIC_W-1:0] offdiag_sum

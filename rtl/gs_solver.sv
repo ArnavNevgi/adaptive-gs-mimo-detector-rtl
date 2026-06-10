@@ -17,11 +17,11 @@ module gs_solver #(
 
     input  logic [4:0] num_iters,
 
-    input  logic signed [W_W-1:0] W_re [N][N],
-    input  logic signed [W_W-1:0] W_im [N][N],
+    input  var logic signed [W_W-1:0] W_re [N][N],
+    input  var logic signed [W_W-1:0] W_im [N][N],
 
-    input  logic signed [B_W-1:0] b_re [N],
-    input  logic signed [B_W-1:0] b_im [N],
+    input  var logic signed [B_W-1:0] b_re [N],
+    input  var logic signed [B_W-1:0] b_im [N],
 
     output logic done,
 

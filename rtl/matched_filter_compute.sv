@@ -12,11 +12,11 @@ module matched_filter_compute #(
     parameter int OUT_W   = fixed_point_pkg::GBW_W,
     parameter int OUT_FRAC = fixed_point_pkg::GBW_FRAC
 ) (
-    input  logic signed [H_W-1:0] H_re [NR][NT],
-    input  logic signed [H_W-1:0] H_im [NR][NT],
+    input  var logic signed [H_W-1:0] H_re [NR][NT],
+    input  var logic signed [H_W-1:0] H_im [NR][NT],
 
-    input  logic signed [Y_W-1:0] y_re [NR],
-    input  logic signed [Y_W-1:0] y_im [NR],
+    input  var logic signed [Y_W-1:0] y_re [NR],
+    input  var logic signed [Y_W-1:0] y_im [NR],
 
     output logic signed [OUT_W-1:0] b_re [NT],
     output logic signed [OUT_W-1:0] b_im [NT]

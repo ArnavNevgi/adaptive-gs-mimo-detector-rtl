@@ -7,8 +7,8 @@ module x_to_xout_converter #(
     parameter int XOUT_W     = fixed_point_pkg::XOUT_W,
     parameter int XOUT_FRAC  = fixed_point_pkg::XOUT_FRAC
 ) (
-    input  logic signed [X_W-1:0]    x_re     [N],
-    input  logic signed [X_W-1:0]    x_im     [N],
+    input  var logic signed [X_W-1:0]    x_re     [N],
+    input  var logic signed [X_W-1:0]    x_im     [N],
 
     output logic signed [XOUT_W-1:0] xout_re  [N],
     output logic signed [XOUT_W-1:0] xout_im  [N]
