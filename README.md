@@ -91,10 +91,32 @@ source syn_seq/vivado_synth_seq.tcl
 
 The default target is:
 
-- Top: `mimo_detector_top_seq_synth_wrapper`
+- Synthesis top: `mimo_detector_top_seq_synth_wrapper`
 - Part: `xc7a35tcpg236-1`
 - Clock: 10 ns unless overridden
 - Flow: synthesis only, out-of-context by default
+
+## Current Implementation Flow
+
+Run implementation/place-and-route at 50 MHz first.
+
+Vivado GUI Tcl:
+
+```tcl
+close_project
+set argv [list -clock_period 20.000]
+source syn_seq/vivado_impl_seq.tcl
+```
+
+Batch:
+
+```tcl
+vivado -mode batch -source syn_seq/vivado_impl_seq.tcl -tclargs -clock_period 20.000
+```
+
+The implementation flow defaults to top `mimo_detector_top_seq_impl_wrapper`, writes reports under `results/phase8_impl_seq/clk_20p000ns/`, and generates `mimo_detector_top_seq.bit` only after routing succeeds.
+
+Implementation uses `mimo_detector_top_seq_impl_wrapper`, a compact host-register wrapper around the verified sequential core. The flattened synthesis wrapper has 810 top-level ports and is not package-placeable on the `cpg236` device.
 
 ## Next Step
 
@@ -107,3 +129,4 @@ Do not claim board implementation completion until post-route timing and impleme
 - [Phase 8 Sequential Architecture](docs/phase8_sequential_architecture.md)
 - [Area Optimization Plan](docs/area_optimization_plan.md)
 - [Sequential Vivado Synthesis Notes](syn_seq/README_synthesis_seq.md)
+- [Sequential Vivado Implementation Notes](syn_seq/README_implementation_seq.md)

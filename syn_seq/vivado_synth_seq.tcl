@@ -17,6 +17,10 @@ set run_ooc 1
 
 source [file join $script_dir "filelist_rtl_seq.tcl"]
 
+if {![info exists default_synth_top] || ($default_synth_top eq "")} {
+    error "default_synth_top is not defined by syn_seq/filelist_rtl_seq.tcl"
+}
+
 if {![info exists argv]} {
     set argv [list]
 }

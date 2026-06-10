@@ -1,5 +1,5 @@
 # RTL file list for Phase 8 sequential Vivado synthesis.
-# Keep fixed_point_pkg.sv first and the flattened synthesis wrapper last.
+# Keep fixed_point_pkg.sv first and wrappers last.
 # This list targets the optimized sequential, resource-shared architecture.
 
 set rtl_seq_files [list \
@@ -14,6 +14,8 @@ set rtl_seq_files [list \
     rtl_seq/gs_solver_seq.sv \
     rtl_seq/mimo_detector_top_seq.sv \
     rtl_seq/mimo_detector_top_seq_synth_wrapper.sv \
+    rtl_seq/mimo_detector_top_seq_impl_wrapper.sv \
 ]
 
 set default_synth_top mimo_detector_top_seq_synth_wrapper
+set default_impl_top mimo_detector_top_seq_impl_wrapper
