@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2025.2 (win64) Build 6299465 Fri Nov 14 19:35:11 GMT 2025
-| Date         : Wed Jun 10 23:09:54 2026
+| Date         : Wed Jun 10 23:28:12 2026
 | Host         : Nevgi running 64-bit major release  (build 9200)
 | Command      : report_utilization -file C:/fpga_projects/adaptive-gs-mimo-detector/results/phase8_synthesis_seq/utilization_seq.rpt
 | Design       : mimo_detector_top_seq_synth_wrapper
@@ -31,8 +31,8 @@ Table of Contents
 +-------------------------+------+-------+------------+-----------+-------+
 |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
 +-------------------------+------+-------+------------+-----------+-------+
-| Slice LUTs*             | 3024 |     0 |          0 |     20800 | 14.54 |
-|   LUT as Logic          | 3024 |     0 |          0 |     20800 | 14.54 |
+| Slice LUTs*             | 2962 |     0 |          0 |     20800 | 14.24 |
+|   LUT as Logic          | 2962 |     0 |          0 |     20800 | 14.24 |
 |   LUT as Memory         |    0 |     0 |          0 |      9600 |  0.00 |
 | Slice Registers         | 2289 |     0 |          0 |     41600 |  5.50 |
 |   Register as Flip Flop | 2289 |     0 |          0 |     41600 |  5.50 |
@@ -156,9 +156,9 @@ Warning! For any ECO changes, please run place_design if there are unplaced inst
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
 | FDCE     | 2288 |        Flop & Latch |
-| LUT6     | 1414 |                 LUT |
+| LUT6     | 1371 |                 LUT |
 | LUT2     |  971 |                 LUT |
-| LUT4     |  333 |                 LUT |
+| LUT4     |  376 |                 LUT |
 | LUT3     |  332 |                 LUT |
 | LUT5     |  319 |                 LUT |
 | CARRY4   |  255 |          CarryLogic |
