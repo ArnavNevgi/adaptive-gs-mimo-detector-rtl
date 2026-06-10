@@ -1,65 +1,94 @@
 # Area Optimization Plan
 
-## A. Problem Summary
+## Status
 
-The current Phase 5/6 RTL is functionally verified, but it is too parallel for the first Artix-7 synthesis target. Vivado synthesis succeeds, but implementation fails at `place_design` because the design exceeds the available logic and carry resources on `xc7a35tcpg236-1`.
+The area optimization work has moved from planning to measured Phase 8 results.
 
-The current RTL should be treated as a verified functional baseline. It is useful for algorithm-to-RTL equivalence, but it is not yet an area-optimized FPGA architecture.
+The verified unrolled RTL in `rtl/` remains the golden functional baseline. The optimized sequential RTL in `rtl_seq/` is now the FPGA synthesis candidate.
 
-## B. Current Resource Over-Utilization Numbers
+## Problem With The Unrolled Baseline
 
-Vivado DRC result for `xc7a35tcpg236-1`:
+The unrolled baseline RTL passed functional verification, but it mapped too much arithmetic into one hardware instance:
 
-- `CARRY4` required: `23715`, available: `8150`
-- `LUT as Logic` required: `112285`, available: `20800`
-- `LUT6` required: `38938`, available: `32600`
+- Parallel Gram matrix computation
+- Parallel matched-filter computation
+- Wide fixed-point arithmetic chains
+- Behavioral division in the GS solver
+- Low register count relative to logic count
 
-## C. Likely Causes
+On `xc7a35tcpg236-1`, this exceeded available logic and carry resources.
 
-- Fully combinational Gram matrix computation for all `G = H^H H` entries
-- Fully combinational matched-filter computation for all `b = H^H y` entries
-- Behavioral division in `gs_solver`
-- Multiple inferred divider structures from diagonal initialization and GS updates
-- Wide fixed-point arithmetic paths
-- Large unrolled combinational datapaths with limited resource sharing
+| Design | LUTs | FFs | DSPs | Timing | Outcome |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `rtl/` unrolled baseline | 116,619 / 20,800 = 560.67% | 374 / 41,600 = 0.90% | 90 / 90 = 100% | WNS about -189.965 ns | Placement failed due to over-utilization |
 
-## D. Proposed Optimized Architecture
+The unrolled design is still valuable. It is the verified reference used to validate the optimized architecture, but it is not a feasible implementation for this target FPGA.
 
-The optimized architecture should preserve the same external detector function and Step 6 reference behavior while reducing area through time-multiplexed datapaths.
+## Sequential Resource Sharing
 
-Recommended structure:
+Phase 8 introduced `rtl_seq/`, a sequential resource-shared architecture.
 
-- Sequential Gram matrix engine using a reusable complex MAC
-- Sequential matched-filter engine using a reusable complex MAC
-- GS solver with one update datapath reused across stream index `i` and iteration count
-- Reciprocal LUT or reciprocal-multiply path replacing behavioral division
-- FSM controller coordinating matrix build, regularization, condition metric, mode select, GS solve, xout conversion, and slicing
-- Same adaptive modes: GS-4, GS-8, GS-16
-- Same fixed-point formats and current RTL-equivalent arithmetic behavior unless explicitly retuned later
+Resource sharing changes the hardware schedule, not the detector algorithm:
 
-## E. Verification Plan
+- One sequential Gram matrix engine replaces broad parallel Gram logic.
+- One sequential matched-filter engine replaces broad parallel matched-filter logic.
+- Regularization and metric accumulation are sequenced.
+- The GS solver reuses update arithmetic across stream index and iteration count.
+- Top-level control is handled by `mimo_detector_top_seq`.
 
-- Reuse the Phase 6 Python-to-RTL vector flow
-- Keep `mimo_detector_top` functional RTL as the reference baseline
-- Add an optimized top or wrapper only after the new architecture is implemented
-- Compare:
-  - mode
-  - num_iters
-  - xout
-  - QPSK bits
-- Start with the existing 100 vectors
-- Expand vectors after the optimized architecture matches the functional baseline
+This trades latency for area. That is the intended optimization for the Artix-7 target.
 
-## F. Expected Benefit
+## Step 8.9 Timing Optimization
 
-- Much lower LUT and CARRY usage through resource sharing
-- Reduced inferred divider area after reciprocal replacement
-- Lower combinational depth per cycle
-- More cycles per frame and higher latency
-- Same algorithmic behavior and same detector outputs within the agreed RTL-equivalent tolerance
+The first sequential synthesis fit in area but failed timing badly.
 
-## G. Implementation Status
+Root cause:
 
-Do not implement the optimized architecture yet unless explicitly requested.
+- `rtl_seq/gs_solver_seq.sv` still contained behavioral division.
+- Vivado synthesized `/` as a large combinational divider.
+- The critical path passed through GS division logic and into solver output registers.
 
-The next step is to collect post-synthesis/post-opt reports from the current baseline, then use those reports to size the sequential engines and reciprocal strategy.
+Step 8.9 added `rtl_seq/signed_divider_seq.sv` and changed `gs_solver_seq` to use divider start/wait states. The divider is multi-cycle, signed, and bit-exact with the old quotient behavior.
+
+## Utilization And Timing Comparison
+
+| Design point | LUTs | FFs | DSPs | BRAM | CARRY4 | WNS | Data path delay |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Unrolled baseline RTL | 116,619 / 20,800 = 560.67% | 374 / 41,600 = 0.90% | 90 / 90 = 100% | Not limiting | Not reported here | about -189.965 ns | Not reported here |
+| Sequential before divider fix | 15,561 / 20,800 = 74.81% | 2,127 / 41,600 = 5.11% | 12 / 90 = 13.33% | 0 / 50 = 0.00% | 3,632 | -173.984 ns | 183.929 ns |
+| Sequential after `signed_divider_seq` | 3,024 / 20,800 = 14.54% | 2,289 / 41,600 = 5.50% | 12 / 90 = 13.33% | 0 / 50 = 0.00% | 255 | -4.130 ns at 10 ns | about 14.075 ns |
+
+The divider fix sharply reduced LUT and carry-chain usage because Vivado no longer had to build a wide combinational divider in the GS update cycle.
+
+These are synthesis results, not post-route implementation results.
+
+## Clock Sweep After Divider Fix
+
+| Clock period | Frequency | Synthesis result | WNS |
+| ---: | ---: | --- | ---: |
+| 20.0 ns | 50.0 MHz | PASS | +5.918 ns |
+| 15.0 ns | 66.7 MHz | PASS | +0.918 ns |
+| 12.5 ns | 80.0 MHz | FAIL | -1.634 ns |
+| 10.0 ns | 100.0 MHz | FAIL | -4.130 ns |
+
+50 MHz and 66.7 MHz are synthesis-clean. 80 MHz and 100 MHz still fail at synthesis.
+
+## Verification Guardrails
+
+The optimization must preserve exact RTL behavior against the Phase 6 vector set.
+
+Current status:
+
+- Baseline unrolled RTL passed the 100-vector Python-to-RTL verification.
+- Sequential top passed all 100 Phase 6 vectors bit-exactly.
+- Step 8.9 divider replacement kept exact simulation checks.
+- No test tolerance was loosened.
+
+## Next Implementation Plan
+
+1. Run implementation/place-and-route at 50 MHz first.
+2. Review post-route utilization, timing, and routing congestion.
+3. If 50 MHz closes, try 66.7 MHz.
+4. Keep 80 MHz and 100 MHz as later optimization targets, because they still fail at synthesis.
+
+The project should not claim board implementation completion until post-route timing is clean and implementation reports have been reviewed.
