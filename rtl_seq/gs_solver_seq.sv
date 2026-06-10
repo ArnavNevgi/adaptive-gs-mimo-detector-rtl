@@ -33,10 +33,17 @@ module gs_solver_seq #(
     typedef enum logic [3:0] {
         S_IDLE,
         S_CLEAR,
-        S_INIT_DIV,
+        S_INIT_DIV_RE_START,
+        S_INIT_DIV_RE_WAIT,
+        S_INIT_DIV_IM_START,
+        S_INIT_DIV_IM_WAIT,
         S_ITER_START,
         S_UPDATE_INIT,
         S_UPDATE_ACCUM,
+        S_UPDATE_DIV_RE_START,
+        S_UPDATE_DIV_RE_WAIT,
+        S_UPDATE_DIV_IM_START,
+        S_UPDATE_DIV_IM_WAIT,
         S_UPDATE_WRITE,
         S_DONE
     } state_t;
@@ -63,34 +70,20 @@ module gs_solver_seq #(
     logic signed [X_W-1:0] xj_re;
     logic signed [X_W-1:0] xj_im;
 
+    localparam int DIV_SHIFT = X_FRAC + W_FRAC - ACC_FRAC;
+    localparam int DIV_NUM_W = ACC_W + X_FRAC + W_FRAC;
+
+    logic divider_start;
+    logic divider_done;
+    logic divider_busy;
+    logic signed [DIV_NUM_W-1:0] divider_numerator;
+    logic signed [W_W-1:0] divider_denominator;
+    logic signed [DIV_NUM_W-1:0] divider_quotient;
+
     // ------------------------------------------------------------
     // Fixed-point helper functions
     // Must match rtl/gs_solver.sv
     // ------------------------------------------------------------
-
-    function automatic logic signed [X_W-1:0] div_q_to_x(
-        input logic signed [ACC_W-1:0] num,
-        input logic signed [W_W-1:0] den
-    );
-        localparam int DIV_SHIFT = X_FRAC + W_FRAC - ACC_FRAC;
-
-        logic signed [ACC_W+X_FRAC+W_FRAC-1:0] num_shift;
-        logic signed [ACC_W+X_FRAC+W_FRAC-1:0] quot;
-
-        begin
-            if (den == 0) begin
-                div_q_to_x = '0;
-            end else begin
-                if (DIV_SHIFT >= 0)
-                    num_shift = num <<< DIV_SHIFT;
-                else
-                    num_shift = num >>> (-DIV_SHIFT);
-
-                quot = num_shift / den;
-                div_q_to_x = quot[X_W-1:0];
-            end
-        end
-    endfunction
 
     function automatic logic signed [ACC_W-1:0] mult_wx_to_acc(
         input logic signed [W_W-1:0] w,
@@ -125,6 +118,31 @@ module gs_solver_seq #(
         end
     endfunction
 
+    function automatic logic signed [DIV_NUM_W-1:0] div_num_to_shifted(
+        input logic signed [ACC_W-1:0] num
+    );
+        begin
+            if (DIV_SHIFT >= 0)
+                div_num_to_shifted = num <<< DIV_SHIFT;
+            else
+                div_num_to_shifted = num >>> (-DIV_SHIFT);
+        end
+    endfunction
+
+    signed_divider_seq #(
+        .NUM_W(DIV_NUM_W),
+        .DEN_W(W_W)
+    ) u_signed_divider_seq (
+        .clk(clk),
+        .rst_n(rst_n),
+        .start(divider_start),
+        .numerator(divider_numerator),
+        .denominator(divider_denominator),
+        .done(divider_done),
+        .busy(divider_busy),
+        .quotient(divider_quotient)
+    );
+
     // ------------------------------------------------------------
     // Sequential MAC datapath for current idx, j_idx
     // ------------------------------------------------------------
@@ -149,6 +167,39 @@ module gs_solver_seq #(
 
         numerator_re = b_to_acc(b_re[idx]) - sum_re;
         numerator_im = b_to_acc(b_im[idx]) - sum_im;
+    end
+
+    always_comb begin
+        divider_start = 1'b0;
+        divider_numerator = '0;
+        divider_denominator = W_re[idx][idx];
+
+        case (state)
+            S_INIT_DIV_RE_START: begin
+                divider_start = 1'b1;
+                divider_numerator = div_num_to_shifted(b_to_acc(b_re[idx]));
+            end
+
+            S_INIT_DIV_IM_START: begin
+                divider_start = 1'b1;
+                divider_numerator = div_num_to_shifted(b_to_acc(b_im[idx]));
+            end
+
+            S_UPDATE_DIV_RE_START: begin
+                divider_start = 1'b1;
+                divider_numerator = div_num_to_shifted(numerator_re);
+            end
+
+            S_UPDATE_DIV_IM_START: begin
+                divider_start = 1'b1;
+                divider_numerator = div_num_to_shifted(numerator_im);
+            end
+
+            default: begin
+                divider_start = 1'b0;
+                divider_numerator = '0;
+            end
+        endcase
     end
 
     integer ii;
@@ -199,21 +250,36 @@ module gs_solver_seq #(
                     end
 
                     idx   <= '0;
-                    state <= S_INIT_DIV;
+                    state <= S_INIT_DIV_RE_START;
                 end
 
-                S_INIT_DIV: begin
-                    // Diagonal initialization:
-                    // x0[i] = b[i] / W[i][i]
-                    x_re[idx] <= div_q_to_x(b_to_acc(b_re[idx]), W_re[idx][idx]);
-                    x_im[idx] <= div_q_to_x(b_to_acc(b_im[idx]), W_re[idx][idx]);
+                S_INIT_DIV_RE_START: begin
+                    state <= S_INIT_DIV_RE_WAIT;
+                end
 
-                    if (idx == N-1) begin
-                        idx        <= '0;
-                        iter_count <= '0;
-                        state      <= S_ITER_START;
-                    end else begin
-                        idx <= idx + 1'b1;
+                S_INIT_DIV_RE_WAIT: begin
+                    if (divider_done) begin
+                        x_re[idx] <= divider_quotient[X_W-1:0];
+                        state <= S_INIT_DIV_IM_START;
+                    end
+                end
+
+                S_INIT_DIV_IM_START: begin
+                    state <= S_INIT_DIV_IM_WAIT;
+                end
+
+                S_INIT_DIV_IM_WAIT: begin
+                    if (divider_done) begin
+                        x_im[idx] <= divider_quotient[X_W-1:0];
+
+                        if (idx == N-1) begin
+                            idx        <= '0;
+                            iter_count <= '0;
+                            state      <= S_ITER_START;
+                        end else begin
+                            idx   <= idx + 1'b1;
+                            state <= S_INIT_DIV_RE_START;
+                        end
                     end
                 end
 
@@ -244,18 +310,35 @@ module gs_solver_seq #(
                     end
 
                     if (j_idx == N-1) begin
-                        state <= S_UPDATE_WRITE;
+                        state <= S_UPDATE_DIV_RE_START;
                     end else begin
                         j_idx <= j_idx + 1'b1;
                     end
                 end
 
-                S_UPDATE_WRITE: begin
-                    // Same assumption as original gs_solver:
-                    // W diagonal is treated as real-dominant.
-                    x_re[idx] <= div_q_to_x(numerator_re, W_re[idx][idx]);
-                    x_im[idx] <= div_q_to_x(numerator_im, W_re[idx][idx]);
+                S_UPDATE_DIV_RE_START: begin
+                    state <= S_UPDATE_DIV_RE_WAIT;
+                end
 
+                S_UPDATE_DIV_RE_WAIT: begin
+                    if (divider_done) begin
+                        x_re[idx] <= divider_quotient[X_W-1:0];
+                        state <= S_UPDATE_DIV_IM_START;
+                    end
+                end
+
+                S_UPDATE_DIV_IM_START: begin
+                    state <= S_UPDATE_DIV_IM_WAIT;
+                end
+
+                S_UPDATE_DIV_IM_WAIT: begin
+                    if (divider_done) begin
+                        x_im[idx] <= divider_quotient[X_W-1:0];
+                        state <= S_UPDATE_WRITE;
+                    end
+                end
+
+                S_UPDATE_WRITE: begin
                     if (idx == N-1) begin
                         idx        <= '0;
                         iter_count <= iter_count + 1'b1;

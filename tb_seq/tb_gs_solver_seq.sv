@@ -106,7 +106,7 @@ module tb_gs_solver_seq;
             seen_seq = 1'b0;
             seen_ref = 1'b0;
 
-            while (!(seen_seq && seen_ref) && timeout < 3000) begin
+            while (!(seen_seq && seen_ref) && timeout < 10000) begin
                 @(posedge clk);
 
                 if (done_seq) seen_seq = 1'b1;

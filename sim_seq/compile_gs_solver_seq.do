@@ -9,6 +9,7 @@ vmap work work
 
 vlog -sv +incdir+rtl +incdir+rtl_seq rtl/fixed_point_pkg.sv
 vlog -sv +incdir+rtl +incdir+rtl_seq rtl/gs_solver.sv
+vlog -sv +incdir+rtl +incdir+rtl_seq rtl_seq/signed_divider_seq.sv
 vlog -sv +incdir+rtl +incdir+rtl_seq rtl_seq/gs_solver_seq.sv
 vlog -sv +incdir+rtl +incdir+rtl_seq tb_seq/tb_gs_solver_seq.sv
 

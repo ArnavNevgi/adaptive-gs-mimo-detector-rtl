@@ -10,6 +10,7 @@ set rtl_seq_files [list \
     rtl_seq/gram_matrix_seq.sv \
     rtl_seq/matched_filter_seq.sv \
     rtl_seq/regularization_metric_seq.sv \
+    rtl_seq/signed_divider_seq.sv \
     rtl_seq/gs_solver_seq.sv \
     rtl_seq/mimo_detector_top_seq.sv \
     rtl_seq/mimo_detector_top_seq_synth_wrapper.sv \
