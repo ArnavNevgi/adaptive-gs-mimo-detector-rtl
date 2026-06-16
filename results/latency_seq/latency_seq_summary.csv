@@ -1,0 +1,7 @@
+vector_name,mode,num_iters,cycles_start_to_done,bits_match,xout_match,result
+identity_gs4,0,4,2568,1,1,PASS
+phase6_real_nondiagonal_gs4,0,4,2568,1,1,PASS
+phase6_complex_noise_gs8,1,8,4524,1,1,PASS
+phase6_random_rayleigh_8db_gs8,1,8,4524,1,1,PASS
+phase6_complex_noise_gs16,2,16,8436,1,1,PASS
+phase6_weak_dominance_gs16,2,16,8436,1,1,PASS

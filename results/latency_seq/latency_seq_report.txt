@@ -1,0 +1,22 @@
+Sequential detector latency report
+Clock frequency assumption: 50 MHz
+Latency definition: detector start accepted to done assertion
+
+                       vector_name mode num_iters cycles_start_to_done  bits_match  xout_match   result      vectors/s  detected_bits/s
+                      identity_gs4    0         4                 2568        PASS        PASS     PASS       19470.40        155763.24
+       phase6_real_nondiagonal_gs4    0         4                 2568        PASS        PASS     PASS       19470.40        155763.24
+          phase6_complex_noise_gs8    1         8                 4524        PASS        PASS     PASS       11052.17         88417.33
+    phase6_random_rayleigh_8db_gs8    1         8                 4524        PASS        PASS     PASS       11052.17         88417.33
+         phase6_complex_noise_gs16    2        16                 8436        PASS        PASS     PASS        5926.98         47415.84
+        phase6_weak_dominance_gs16    2        16                 8436        PASS        PASS     PASS        5926.98         47415.84
+
+Summary statistics
+min_cycles,2568
+max_cycles,8436
+average_cycles,5176.00
+
+Throughput estimates at 50 MHz
+    mode     avg_cycles vectors_per_second detected_bits_per_second
+       0        2568.00           19470.40              155763.24
+1               4524.00           11052.17               88417.33
+2               8436.00            5926.98               47415.84
