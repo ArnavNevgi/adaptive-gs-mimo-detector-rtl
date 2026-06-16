@@ -363,6 +363,83 @@ def fixed_case_weak_dominance(rng):
     }
 
 
+def fixed_bits_pattern(index):
+    patterns = [
+        [0, 0, 0, 1, 1, 1, 1, 0],
+        [1, 1, 1, 0, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 0, 1, 0],
+        [1, 1, 1, 1, 0, 1, 0, 0],
+        [0, 1, 0, 1, 1, 0, 0, 1],
+        [1, 0, 0, 0, 0, 1, 1, 1],
+    ]
+    return np.array(patterns[index % len(patterns)], dtype=np.int8)
+
+
+def uart_case_diagonal_variant(index, snr_db):
+    scale_sets = [
+        [1.0, 0.75, 1.25, 0.5],
+        [0.9, 1.1, 0.8, 1.2],
+        [1.3, 0.7, 1.0, 0.6],
+        [0.65, 1.2, 0.95, 1.35],
+    ]
+    H = np.diag(scale_sets[index % len(scale_sets)]).astype(np.complex128)
+    return {
+        "case_name": f"uart_diag_variant_{snr_db}db_{index}",
+        "bits_tx": fixed_bits_pattern(index),
+        "H": H,
+        "snr_db": snr_db,
+        "noise_var_override": None,
+    }
+
+
+def uart_case_real_coupled(index, snr_db, coupling):
+    H = np.eye(NR, NT, dtype=np.complex128)
+    for i in range(NT - 1):
+        H[i, i + 1] = coupling + 0.02 * ((index + i) % 3)
+        H[i + 1, i] = 0.75 * coupling + 0.01 * ((index + i) % 2)
+    return {
+        "case_name": f"uart_real_coupled_{snr_db}db_c{int(coupling * 100)}_{index}",
+        "bits_tx": fixed_bits_pattern(index + 2),
+        "H": H,
+        "snr_db": snr_db,
+        "noise_var_override": None,
+    }
+
+
+def uart_case_complex_coupled(index, snr_db, coupling):
+    H = np.eye(NR, NT, dtype=np.complex128)
+    for i in range(NT - 1):
+        H[i, i + 1] = coupling + 1j * (coupling / 2.0 + 0.01 * ((index + i) % 2))
+        H[i + 1, i] = 0.6 * coupling - 1j * (coupling / 3.0 + 0.015 * ((index + i) % 3))
+    H[0, 2] = 0.03j * ((index % 3) + 1)
+    H[2, 0] = -0.02j * (((index + 1) % 3) + 1)
+    return {
+        "case_name": f"uart_complex_coupled_{snr_db}db_c{int(coupling * 100)}_{index}",
+        "bits_tx": fixed_bits_pattern(index + 3),
+        "H": H,
+        "snr_db": snr_db,
+        "noise_var_override": None,
+    }
+
+
+def uart_case_correlated(index, snr_db):
+    local_rng = np.random.default_rng(1000 + index)
+    base = (local_rng.standard_normal(NR) + 1j * local_rng.standard_normal(NR)) / np.sqrt(2)
+    H = np.zeros((NR, NT), dtype=np.complex128)
+    for c in range(NT):
+        perturb = 0.03 * (
+            local_rng.standard_normal(NR) + 1j * local_rng.standard_normal(NR)
+        )
+        H[:, c] = base + perturb
+    return {
+        "case_name": f"uart_correlated_{snr_db}db_{index}",
+        "bits_tx": fixed_bits_pattern(index + 4),
+        "H": H,
+        "snr_db": snr_db,
+        "noise_var_override": None,
+    }
+
+
 def random_rayleigh_case(rng, snr_db, index):
     bits = rng.integers(0, 2, size=2 * NT, dtype=np.int8)
     H = (rng.standard_normal((NR, NT)) + 1j * rng.standard_normal((NR, NT))) / np.sqrt(2)
@@ -392,6 +469,81 @@ def build_case_specs(num_vectors, rng):
         specs.append(random_rayleigh_case(rng, snr_db, idx + 1))
         idx += 1
     return specs[:num_vectors]
+
+
+def build_uart_extra_case_specs(rng):
+    specs = []
+    for idx in range(8):
+        specs.append(uart_case_diagonal_variant(idx, 20))
+    for idx in range(5):
+        specs.append(uart_case_real_coupled(idx, 20, 0.08))
+    for idx in range(5):
+        specs.append(uart_case_complex_coupled(idx, 20, 0.06))
+    for idx in range(8):
+        specs.append(uart_case_diagonal_variant(idx, 6))
+    for idx in range(5):
+        specs.append(uart_case_real_coupled(idx, 6, 0.10))
+    for idx in range(5):
+        specs.append(uart_case_complex_coupled(idx, 6, 0.08))
+    for idx in range(10):
+        specs.append(uart_case_correlated(idx, 12 if idx % 2 else 8))
+
+    snr_cycle = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    for idx in range(80):
+        specs.append(random_rayleigh_case(rng, snr_cycle[idx % len(snr_cycle)], idx + 100))
+    return specs
+
+
+def reindex_vectors(vectors):
+    reindexed = []
+    for idx, vector in enumerate(vectors):
+        item = dict(vector)
+        item["vector_idx"] = idx
+        reindexed.append(item)
+    return reindexed
+
+
+def select_balanced_extras(base_vectors, candidate_vectors, target_count):
+    selected = list(base_vectors)
+    coverage = {mode: 0 for mode in MODE_ITERS}
+    for vector in selected:
+        coverage[int(vector["expected_mode"])] += 1
+
+    by_mode = {mode: [] for mode in MODE_ITERS}
+    used_names = {vector["case_name"] for vector in selected}
+    for vector in candidate_vectors:
+        if vector["case_name"] in used_names:
+            continue
+        by_mode[int(vector["expected_mode"])].append(vector)
+
+    while len(selected) < target_count and any(by_mode.values()):
+        available_modes = [mode for mode in MODE_ITERS if by_mode[mode]]
+        mode = min(available_modes, key=lambda item: (coverage[item], item))
+        vector = by_mode[mode].pop(0)
+        selected.append(vector)
+        coverage[mode] += 1
+
+    return reindex_vectors(selected[:target_count])
+
+
+def build_uart_profile_vectors(num_vectors, seed):
+    base_rng = np.random.default_rng(seed)
+    base_specs = build_case_specs(min(20, num_vectors), base_rng)
+    base_vectors = [
+        generate_vector(spec, base_rng, idx)
+        for idx, spec in enumerate(base_specs)
+    ]
+    if num_vectors <= len(base_vectors):
+        return reindex_vectors(base_vectors[:num_vectors])
+
+    extra_spec_rng = np.random.default_rng(seed + 9000)
+    extra_specs = build_uart_extra_case_specs(extra_spec_rng)
+    extra_vector_rng = np.random.default_rng(seed + 9001)
+    extra_vectors = [
+        generate_vector(spec, extra_vector_rng, len(base_vectors) + idx)
+        for idx, spec in enumerate(extra_specs)
+    ]
+    return select_balanced_extras(base_vectors, extra_vectors, num_vectors)
 
 
 def generate_vector(spec, rng, vector_idx):
@@ -563,18 +715,36 @@ def parse_args():
         type=Path,
         default=PROJECT_ROOT / "vectors" / "phase6_rtl_vectors" / "phase6_vectors_summary.json",
     )
+    parser.add_argument(
+        "--skip-sv",
+        action="store_true",
+        help="Write only the JSON summary and leave the SystemVerilog package untouched",
+    )
+    parser.add_argument(
+        "--profile",
+        choices=("default", "uart"),
+        default="default",
+        help="Vector generation profile; 'uart' preserves the 20-vector base and adds balanced UART extras",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    rng = np.random.default_rng(args.seed)
-    specs = build_case_specs(args.num_vectors, rng)
-    vectors = [generate_vector(spec, rng, idx) for idx, spec in enumerate(specs)]
-    write_sv_package(vectors, args.sv_output)
+    if args.profile == "uart":
+        vectors = build_uart_profile_vectors(args.num_vectors, args.seed)
+    else:
+        rng = np.random.default_rng(args.seed)
+        specs = build_case_specs(args.num_vectors, rng)
+        vectors = [generate_vector(spec, rng, idx) for idx, spec in enumerate(specs)]
+    if not args.skip_sv:
+        write_sv_package(vectors, args.sv_output)
     write_json_summary(vectors, args.json_output)
     print(f"Generated {len(vectors)} Phase 6 RTL-equivalence vectors")
-    print(f"SV package: {args.sv_output}")
+    if args.skip_sv:
+        print("SV package: skipped")
+    else:
+        print(f"SV package: {args.sv_output}")
     print(f"JSON summary: {args.json_output}")
 
 

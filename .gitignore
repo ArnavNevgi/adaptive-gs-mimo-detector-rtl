@@ -29,3 +29,24 @@ __pycache__/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Python generated files
+__pycache__/
+*.pyc
+
+# Vivado / XSIM generated working files
+.Xil/
+xsim.dir/
+run/
+*.wdb
+*.pb
+*.jou
+*.log
+clockInfo.txt
+
+# Large FPGA build artifacts
+*.dcp
+*.bit
+*.bin
+*.ltx
+*.rptjou

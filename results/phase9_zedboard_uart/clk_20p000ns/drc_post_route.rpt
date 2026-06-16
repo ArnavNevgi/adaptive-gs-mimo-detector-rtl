@@ -1,0 +1,244 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2.1 (win64) Build 6403652 Thu Mar 19 19:48:24 GMT 2026
+| Date         : Sun Jun 14 03:47:24 2026
+| Host         : Nevgi running 64-bit major release  (build 9200)
+| Command      : report_drc -file C:/fpga_projects/adaptive-gs-mimo-detector/results/phase9_zedboard_uart/clk_20p000ns/drc_post_route.rpt
+| Design       : zedboard_mimo_uart_top
+| Device       : xc7z020clg484-1
+| Speed File   : -1
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: zedboard_mimo_uart_top
+          Floorplan: design_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 41
++--------+----------+------------------------+--------+
+| Rule   | Severity | Description            | Checks |
++--------+----------+------------------------+--------+
+| DPIP-1 | Warning  | Input pipelining       | 24     |
+| DPOP-1 | Warning  | PREG Output pipelining | 8      |
+| DPOP-2 | Warning  | MREG Output pipelining | 8      |
+| ZPS7-1 | Warning  | PS7 block required     | 1      |
++--------+----------+------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+DPIP-1#1 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value input u_mimo_detector_top_seq/u_gram_matrix_seq/value/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#2 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value input u_mimo_detector_top_seq/u_gram_matrix_seq/value/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#3 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value0 input u_mimo_detector_top_seq/u_gram_matrix_seq/value0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#4 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value0 input u_mimo_detector_top_seq/u_gram_matrix_seq/value0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#5 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value0__0 input u_mimo_detector_top_seq/u_gram_matrix_seq/value0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#6 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value0__0 input u_mimo_detector_top_seq/u_gram_matrix_seq/value0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#7 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value__0 input u_mimo_detector_top_seq/u_gram_matrix_seq/value__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#8 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value__0 input u_mimo_detector_top_seq/u_gram_matrix_seq/value__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#9 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#10 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#11 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#12 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#13 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#14 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#15 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#16 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2 input u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#17 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value input u_mimo_detector_top_seq/u_matched_filter_seq/value/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#18 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value input u_mimo_detector_top_seq/u_matched_filter_seq/value/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#19 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value0 input u_mimo_detector_top_seq/u_matched_filter_seq/value0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#20 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value0 input u_mimo_detector_top_seq/u_matched_filter_seq/value0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#21 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value0__0 input u_mimo_detector_top_seq/u_matched_filter_seq/value0__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#22 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value0__0 input u_mimo_detector_top_seq/u_matched_filter_seq/value0__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#23 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value__0 input u_mimo_detector_top_seq/u_matched_filter_seq/value__0/A[29:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPIP-1#24 Warning
+Input pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value__0 input u_mimo_detector_top_seq/u_matched_filter_seq/value__0/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+Related violations: <none>
+
+DPOP-1#1 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value output u_mimo_detector_top_seq/u_gram_matrix_seq/value/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#2 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value__0 output u_mimo_detector_top_seq/u_gram_matrix_seq/value__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#3 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0 output u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#4 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0 output u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#5 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1 output u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#6 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2 output u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#7 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value output u_mimo_detector_top_seq/u_matched_filter_seq/value/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-1#8 Warning
+PREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value__0 output u_mimo_detector_top_seq/u_matched_filter_seq/value__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+Related violations: <none>
+
+DPOP-2#1 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value multiplier stage u_mimo_detector_top_seq/u_gram_matrix_seq/value/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#2 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gram_matrix_seq/value__0 multiplier stage u_mimo_detector_top_seq/u_gram_matrix_seq/value__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#3 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0 multiplier stage u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#4 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0 multiplier stage u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#5 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1 multiplier stage u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__1/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#6 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2 multiplier stage u_mimo_detector_top_seq/u_gs_solver_seq/mult_wx_to_acc_return0__2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#7 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value multiplier stage u_mimo_detector_top_seq/u_matched_filter_seq/value/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+DPOP-2#8 Warning
+MREG Output pipelining  
+DSP u_mimo_detector_top_seq/u_matched_filter_seq/value__0 multiplier stage u_mimo_detector_top_seq/u_matched_filter_seq/value__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+Related violations: <none>
+
+ZPS7-1#1 Warning
+PS7 block required  
+The PS7 cell must be used in this Zynq design in order to enable correct default configuration.
+Related violations: <none>
+
+

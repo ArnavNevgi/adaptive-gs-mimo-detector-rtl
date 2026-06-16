@@ -48,6 +48,8 @@ module gram_matrix_seq #(
     // Product intermediates.
     // H is Q4.12, so raw product is Q8.24.
     localparam int PROD_W = 2 * H_W;
+    localparam int SHIFT_TO_ACC = (2 * H_FRAC) - ACC_FRAC;
+    localparam int SHIFT_TO_OUT = ACC_FRAC - GBW_FRAC;
 
     logic signed [PROD_W-1:0] ac;
     logic signed [PROD_W-1:0] bd;
@@ -69,6 +71,28 @@ module gram_matrix_seq #(
     // = (a - jb)(c + jd)
     // = (ac + bd) + j(ad - bc)
 
+    function automatic logic signed [ACC_W-1:0] product_to_acc(
+        input logic signed [PROD_W:0] value
+    );
+        begin
+            if (SHIFT_TO_ACC >= 0)
+                product_to_acc = value >>> SHIFT_TO_ACC;
+            else
+                product_to_acc = value <<< (-SHIFT_TO_ACC);
+        end
+    endfunction
+
+    function automatic logic signed [GBW_W-1:0] acc_to_gbw(
+        input logic signed [ACC_W-1:0] value
+    );
+        begin
+            if (SHIFT_TO_OUT >= 0)
+                acc_to_gbw = value >>> SHIFT_TO_OUT;
+            else
+                acc_to_gbw = value <<< (-SHIFT_TO_OUT);
+        end
+    endfunction
+
     always_comb begin
         ac = H_re[r_idx][i_idx] * H_re[r_idx][j_idx];
         bd = H_im[r_idx][i_idx] * H_im[r_idx][j_idx];
@@ -78,10 +102,10 @@ module gram_matrix_seq #(
         prod_re_full = $signed(ac) + $signed(bd);
         prod_im_full = $signed(ad) - $signed(bc);
 
-        // Convert Q8.24 product back to Q8.12-like scale.
-        // This matches fixed-point multiply behavior: truncate by H_FRAC bits.
-        prod_re_scaled = $signed(prod_re_full >>> H_FRAC);
-        prod_im_scaled = $signed(prod_im_full >>> H_FRAC);
+        // Match rtl/gram_matrix_compute.sv: truncate each product to ACC_FRAC,
+        // accumulate, then truncate the final accumulator to GBW_FRAC.
+        prod_re_scaled = product_to_acc(prod_re_full);
+        prod_im_scaled = product_to_acc(prod_im_full);
     end
 
     always_comb begin
@@ -194,8 +218,8 @@ module gram_matrix_seq #(
             busy   <= busy_n;
 
             if (state == S_WRITE) begin
-                G_re[i_idx][j_idx] <= acc_re[GBW_W-1:0];
-                G_im[i_idx][j_idx] <= acc_im[GBW_W-1:0];
+                G_re[i_idx][j_idx] <= acc_to_gbw(acc_re);
+                G_im[i_idx][j_idx] <= acc_to_gbw(acc_im);
             end
         end
     end

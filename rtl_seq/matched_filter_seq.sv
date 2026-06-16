@@ -49,6 +49,9 @@ module matched_filter_seq #(
     // H and y are both Q4.12 in this project.
     // Raw product scale is Q8.24.
     localparam int PROD_W = H_W + Y_W;
+    localparam int PROD_FRAC = H_FRAC + Y_FRAC;
+    localparam int SHIFT_TO_ACC = PROD_FRAC - ACC_FRAC;
+    localparam int SHIFT_TO_OUT = ACC_FRAC - GBW_FRAC;
 
     logic signed [PROD_W-1:0] ac;
     logic signed [PROD_W-1:0] bd;
@@ -70,6 +73,28 @@ module matched_filter_seq #(
     // = (a - jb)(c + jd)
     // = (ac + bd) + j(ad - bc)
 
+    function automatic logic signed [ACC_W-1:0] product_to_acc(
+        input logic signed [PROD_W:0] value
+    );
+        begin
+            if (SHIFT_TO_ACC >= 0)
+                product_to_acc = value >>> SHIFT_TO_ACC;
+            else
+                product_to_acc = value <<< (-SHIFT_TO_ACC);
+        end
+    endfunction
+
+    function automatic logic signed [GBW_W-1:0] acc_to_gbw(
+        input logic signed [ACC_W-1:0] value
+    );
+        begin
+            if (SHIFT_TO_OUT >= 0)
+                acc_to_gbw = value >>> SHIFT_TO_OUT;
+            else
+                acc_to_gbw = value <<< (-SHIFT_TO_OUT);
+        end
+    endfunction
+
     always_comb begin
         ac = H_re[r_idx][i_idx] * y_re[r_idx];
         bd = H_im[r_idx][i_idx] * y_im[r_idx];
@@ -79,10 +104,10 @@ module matched_filter_seq #(
         prod_re_full = $signed(ac) + $signed(bd);
         prod_im_full = $signed(ad) - $signed(bc);
 
-        // Convert Q8.24 product back by 12 fractional bits.
-        // This matches the existing fixed-point truncation style.
-        prod_re_scaled = $signed(prod_re_full >>> H_FRAC);
-        prod_im_scaled = $signed(prod_im_full >>> H_FRAC);
+        // Match rtl/matched_filter_compute.sv: truncate each product to
+        // ACC_FRAC, accumulate, then truncate the final accumulator to GBW_FRAC.
+        prod_re_scaled = product_to_acc(prod_re_full);
+        prod_im_scaled = product_to_acc(prod_im_full);
     end
 
     always_comb begin
@@ -180,8 +205,8 @@ module matched_filter_seq #(
             busy   <= busy_n;
 
             if (state == S_WRITE) begin
-                b_re[i_idx] <= acc_re[GBW_W-1:0];
-                b_im[i_idx] <= acc_im[GBW_W-1:0];
+                b_re[i_idx] <= acc_to_gbw(acc_re);
+                b_im[i_idx] <= acc_to_gbw(acc_im);
             end
         end
     end
