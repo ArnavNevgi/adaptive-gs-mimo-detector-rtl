@@ -234,7 +234,7 @@ Vivado implementation reports:
 - `results/phase9_zedboard_uart/clk_20p000ns/timing_post_route.rpt`
 - `results/phase9_zedboard_uart/clk_20p000ns/power_post_route.rpt`
 
-## 10. Paper-Ready Statement
+## 10. Conclusion
 
 The sequential adaptive fixed-point GS MIMO detector was validated on a physical ZedBoard using a PC-driven UART regression flow. Across 50 deterministic fixed-point MIMO vectors, the FPGA returned outputs that matched the Python fixed-point golden model exactly for adaptive mode selection, iteration count, detected QPSK bits, and fixed-point detector outputs. The 50-vector set covered all adaptive modes with near-balanced mode coverage: 17 GS-4, 17 GS-8, and 16 GS-16 cases.
 
