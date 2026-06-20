@@ -4,6 +4,15 @@ This repository implements and validates a 4x4 QPSK MIMO detector using adaptive
 
 The project covers the full path from Python algorithm modeling to fixed-point conversion, RTL implementation, FPGA synthesis/implementation, physical ZedBoard UART validation, and detector latency analysis. The final hardware target is the ZedBoard Zynq-7000 board using part `xc7z020clg484-1`.
 
+## Start Here
+
+For a quick review of the project, use the following path:
+
+- **Algorithm and simulation results:** read [Python Simulation Results and Code](PYTHON_Results_and_Code.md).
+- **FPGA implementation and hardware validation:** read [FPGA Implementation and I/O Validation](FPGA_Implementation_and_IO_Validation.md).
+- **Source code:** inspect [`python/`](python/), [`rtl_seq/`](rtl_seq/), and [`tb_seq/`](tb_seq/).
+- **Final numbers and result tables:** see [Final Result Tables](docs/final_result_tables.md).
+
 ## Project Overview
 
 For a received MIMO vector `y`, channel matrix `H`, and noise variance `noise_var`, the detector computes:
@@ -67,7 +76,28 @@ The received signal model is:
 y = Hx + n
 ```
 
-The detector forms the regularized normal equation:
+Here:
+
+- `H` is the MIMO channel matrix.
+- `x` is the transmitted QPSK symbol vector.
+- `n` is additive noise.
+- `y` is the received vector.
+
+A direct MMSE detector would normally compute:
+
+```text
+x_hat = (H^H H + noise_var I)^(-1) H^H y
+```
+
+This requires explicitly inverting the matrix:
+
+```text
+(H^H H + noise_var I)
+```
+
+Explicit matrix inversion is expensive for FPGA hardware because it requires high arithmetic complexity, division-heavy operations, large datapaths, and more routing/resource pressure.
+
+Instead of directly computing the inverse, this design rewrites the detection problem as a linear system:
 
 ```text
 G = H^H H
@@ -76,11 +106,32 @@ W = G + noise_var I
 W x_hat = b
 ```
 
+The detector does not calculate `W^(-1)`. It solves `W x_hat = b` iteratively using Gauss-Seidel updates. For each symbol estimate `x_i`, the solver updates one element at a time, using the newest already-computed values for earlier indices and the previous iteration values for later indices.
+
 The complex GS update is:
 
 ```text
 x_i = (b_i - sum_{j<i} W_ij x_j_new - sum_{j>i} W_ij x_j_old) / W_ii
 ```
+
+This replaces a full matrix inverse with repeated multiply-accumulate operations and scalar division by diagonal terms `W_ii`, which maps better to the sequential/resource-shared RTL architecture.
+
+### Regularization
+
+The term `noise_var I` is added to `G = H^H H` to form:
+
+```text
+W = H^H H + noise_var I
+```
+
+This is the MMSE-style regularization term. It improves numerical stability compared to pure ZF and reduces noise amplification when the channel matrix is ill-conditioned or near-singular. In simple terms, regularization strengthens the diagonal of the system matrix so that the detector does not overreact to noise.
+
+In this project, `noise_var` is provided as a fixed-point input and used by the sequential regularization/metric block, [rtl_seq/regularization_metric_seq.sv](rtl_seq/regularization_metric_seq.sv), before GS solving. The earlier baseline RTL also includes [rtl/regularization_unit.sv](rtl/regularization_unit.sv).
+
+| Approach | Operation | FPGA Impact |
+| --- | --- | --- |
+| Direct MMSE | Computes `(H^H H + noise_var I)^(-1) H^H y` | Requires explicit matrix inversion, costly divisions, and larger hardware |
+| This project | Forms `G`, `b`, and `W`, then solves `W x = b` using GS iterations | Avoids full matrix inversion and maps better to sequential/resource-shared RTL |
 
 The hardware adaptive policy is:
 
@@ -299,6 +350,10 @@ This project demonstrates an end-to-end FPGA implementation flow for an adaptive
 
 Detailed result documents:
 
+- [FPGA Implementation and I/O Validation](FPGA_Implementation_and_IO_Validation.md)  
+  Explains the ZedBoard FPGA implementation flow, JTAG programming role, UART input/output packet flow, how test vectors were fed into the FPGA, and how detector outputs were captured and checked.
+- [Python Simulation Results and Code](PYTHON_Results_and_Code.md)  
+  Explains the Python floating-point and fixed-point simulation flow, detector benchmarking, adaptive GS policy, BER/iteration results, and golden vector generation for RTL and FPGA validation.
 - [ZedBoard UART demo](docs/zedboard_uart_demo.md)
 - [UART hardware regression results](docs/uart_hardware_regression_results.md)
 - [Final result tables](docs/final_result_tables.md)

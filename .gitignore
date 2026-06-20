@@ -64,3 +64,7 @@ backup*/
 
 # Local generated run outputs
 run/
+
+# Python cache
+__pycache__/
+*.pyc
