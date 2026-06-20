@@ -1,52 +1,66 @@
+# Vivado / Xilinx generated root files
+.Xil/
+/*.jou
+/*.log
+/*.str
+/webtalk*.jou
+/webtalk*.log
+/vivado*.jou
+/vivado*.log
+/clockInfo.txt
+/dfx_runtime.txt
 
-# Questa/ModelSim generated files
+# Vivado project/cache outputs
+/build/
+.cache/
+.hw/
+.ip_user_files/
+.sim/
+*.runs/
+*.gen/
+*.srcs/
+
+# XSIM / simulation outputs
+xsim.dir/
 work/
+xsim_*/
+*.wdb
+*.pb
+*.vcd
+*.fst
+*.ghw
+*.vvp
+
+# Questa / ModelSim generated files
 transcript
+vsim.wlf
 *.wlf
 *.vstf
 *.ucdb
-modelsim.ini
+modelsim.ini.bak
 
-# Vivado generated files
-build/
-*.jou
-*.log
-*.str
-*.dcp
-*.runs/
-*.cache/
-*.hw/
-*.ip_user_files/
-*.sim/
-dfx_runtime.txt
-
-# Python
+# Python cache
 __pycache__/
 *.pyc
+.pytest_cache/
 .venv/
 
-# OS/editor
-.vscode/
+# Editor / OS files
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Python generated files
-__pycache__/
-*.pyc
+# Temporary / backup files
+*~
+*.bak
+*.tmp
+*.orig
+*.backup
+backup*/
+*_backup*
 
-# Vivado / XSIM generated working files
-.Xil/
-xsim.dir/
+# Local generated run outputs
 run/
-*.wdb
-*.pb
-*.jou
-*.log
-clockInfo.txt
-
-# Large FPGA build artifacts
-*.dcp
-*.bit
-*.bin
-*.ltx
-*.rptjou

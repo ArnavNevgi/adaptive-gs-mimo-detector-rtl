@@ -1,0 +1,44 @@
+Design Route Status
+                                               :      # nets :
+   ------------------------------------------- : ----------- :
+   # of logical nets.......................... :        7938 :
+       # of nets with no placed pins.......... :        7912 :
+       # of nets not needing routing.......... :          13 :
+           # of internally routed nets........ :          13 :
+       # of routable nets..................... :           0 :
+       # of nets with routing errors.......... :          13 :
+           # of nets with some unplaced pins.. :          13 :
+           # of nets with some unrouted pins.. :           5 :
+   ------------------------------------------- : ----------- :
+
+
+Nets with Routing Errors:
+  clk_ibuf
+    Unplaced Pin: u_mmcm_100_to_50/CLKIN1
+  display_sw_IBUF
+    Unplaced Pin: display_sw_sync_reg[0]/D
+  led_OBUF[0]
+    Unplaced Pin: led_OBUF[0]_inst_i_1/O
+  led_OBUF[2]
+    Unplaced Pin: led_OBUF[2]_inst_i_1/O
+  led_OBUF[3]
+    Unplaced Pin: led_OBUF[3]_inst_i_1/O
+  led_OBUF[4]
+    Unplaced Pin: led_OBUF[4]_inst_i_1/O
+  led_OBUF[5]
+    Unplaced Pin: led_OBUF[5]_inst_i_1/O
+  led_OBUF[6]
+    Unplaced Pin: led_OBUF[6]_inst_i_1/O
+  led_OBUF[7]
+    Unplaced Pin: led_OBUF[7]_inst_i_1/O
+  rst_btn_IBUF
+    Unplaced Pins:
+      rst_sync_reg[0]/D
+      u_mmcm_100_to_50/RST
+  start_btn_IBUF
+    Unplaced Pin: start_btn_sync_reg[0]/D
+  start_sw_IBUF
+    Unplaced Pin: start_sw_sync_reg[0]/D
+  u_mimo_detector_top_seq/led_OBUF[0]
+    Unplaced Pin: u_mimo_detector_top_seq/led_OBUF[1]_inst_i_1/O
+
